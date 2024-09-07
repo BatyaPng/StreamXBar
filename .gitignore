@@ -3,3 +3,4 @@ request_gen
 fixed_prio_arb
 round_robin
 dump.vcd
+com

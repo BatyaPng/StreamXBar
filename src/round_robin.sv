@@ -45,7 +45,7 @@ reg [WIDTH_NUM-1:0] prio_ptr;
 always @(posedge clk) begin
     if (!rst_n) begin
         prio_ptr <= 0;
-    end else if (prio_ptr == 4) begin
+    end else if (prio_ptr == NUM_REQUEST) begin
         prio_ptr <= 0;
     end else if (num_packet == 1) begin
         prio_ptr <= grant_ptr;
