@@ -3,25 +3,21 @@ module request_gen #(
                M_DATA_COUNT = 3,                                  // кол-во slave  устройств
     localparam T_DEST_WIDTH = $clog2(M_DATA_COUNT)
 )(
-    input  logic clk,
-    input  logic rst_n,
     // input
     input  logic [T_DEST_WIDTH-1:0] s_dest_i [S_DATA_COUNT-1:0],
-    input  logic [T_DEST_WIDTH-1:0] num_slave,
+    input  logic [S_DATA_COUNT-1:0] s_valid_i,
     // output
-    output logic [S_DATA_COUNT-1:0] req_o
+    output logic [S_DATA_COUNT-1:0] req_o [M_DATA_COUNT-1:0]
 );
 
-integer i;
 
-always_comb begin : req_vector
-    req_o = 0;
-
-    for (i = 0; i < S_DATA_COUNT; i = i + 1) begin
-        if (s_dest_i[i] == num_slave) begin
-            req_o[i] = 1;
-        end
+genvar i, j;
+generate
+    for (i = 0; i < M_DATA_COUNT; i = i + 1) begin
+        for (j = 0; j < S_DATA_COUNT; j = j + 1) begin
+            assign req_o[i][j] = (s_dest_i[j] == i) & (s_valid_i[j]);        
+        end  
     end
-end
-    
+endgenerate
+
 endmodule
