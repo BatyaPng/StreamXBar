@@ -32,14 +32,14 @@ initial begin
     $dumpvars;
     // Инициализация сигналов
     clk = 0;
-    rst_n = 1;
+    rst_n = 0;
     request_i = 4'b0000;
     s_last_i = 4'b0000;
     expected_grant_o = 4'b0000;
 
     // Сброс системы
     #2;
-    rst_n = 0;
+    rst_n = 1;
 
     // Тест 1: запрос только от первого устройства и третьего устройства
     #3;
@@ -51,27 +51,27 @@ initial begin
     // Тест 2: первое устройсто завершило работу
     #1;
     s_last_i = 4'b0001;
-    request_i = 4'b0100;
-    expected_grant_o = 4'b0100; // Приоритет третьего устройства
+    request_i = 4'b0110;
+    expected_grant_o = 4'b0010; // Приоритет второго устройства
     #5;
     $display ("Test 2: Expected %b, got %b", expected_grant_o, grant_o);
 
-    // Тест 3: третье устройсто завершило работу, запрос от второго и четвёртого
+    // Тест 3: второе устройсто завершило работу, запрос от первого, третьего и четвёртого
     #1;
-    s_last_i = 4'b0100;
-    request_i = 4'b1010;
-    expected_grant_o = 4'b1000; // Приоритет второго устройства
+    s_last_i = 4'b0010;
+    request_i = 4'b1101;
+    expected_grant_o = 4'b0100; // Приоритет третьего устройства
     #5;
     $display ("Test 3: Expected %b, got %b", expected_grant_o, grant_o);
 
 
     // Тест 4: четвёртон устройсто завершило работу, запрос от второго
     #1;
-    s_last_i = 4'b1000;
-    request_i = 4'b1010;
-    expected_grant_o = 4'b0010; // Приоритет второго устройства
+    s_last_i = 4'b0100;
+    request_i = 4'b1011;
+    expected_grant_o = 4'b1000; // Приоритет второго устройства
     #1;
-    request_i = 4'b0010;
+    // request_i = 4'b0010;
     #5;
     $display ("Test 4: Expected %b, got %b", expected_grant_o, grant_o);
     
