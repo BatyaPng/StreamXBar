@@ -3,7 +3,7 @@ module stream_xbar #(
                S_DATA_COUNT = 2,                                  // кол-во master устройств
                M_DATA_COUNT = 3,                                  // кол-во slave  устройств
                MAX_PACKETS  = 8,
-    localparam T_ID___WIDTH = $clog2(S_DATA_COUNT),
+    localparam T_ID_M_WIDTH = $clog2(S_DATA_COUNT),
                T_DEST_WIDTH = $clog2(M_DATA_COUNT)
 )(
     input  logic clk,

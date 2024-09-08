@@ -1,7 +1,7 @@
 // generated code
 
 module fixed_prio_arb #(
-    parameter NUM_REQUEST = 4
+    parameter NUM_REQUEST = 2
 )(
     // input    
     input  logic [NUM_REQUEST-1:0] request_i,
