@@ -1,4 +1,12 @@
+S_DATA_COUNT = 2   # кол-во master-устройств
+M_DATA_COUNT = 3   # кол-во slave-устройств
+
 all:
+	python3 ./src/bit_add_nor/gen_code.py    $(M_DATA_COUNT)
+	python3 ./src/fixed_prio_arb/gen_code.py $(S_DATA_COUNT)
+	python3 ./src/par_coder/gen_code.py	     $(S_DATA_COUNT)
+	python3 ./src/seq_coder/gen_code.py      $(S_DATA_COUNT)
+
 	iverilog ./test/tb_stream_xbar.sv ./src/stream_xbar.sv ./src/request_gen.sv ./src/fixed_prio_arb/fixed_prio_arb.sv ./src/round_robin.sv ./src/com.sv -g2009 -o stream_xbar
 
 request_gen:

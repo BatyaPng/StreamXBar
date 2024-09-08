@@ -3,7 +3,7 @@ module stream_xbar #(
                S_DATA_COUNT = 2,                                  // кол-во master устройств
                M_DATA_COUNT = 3,                                  // кол-во slave  устройств
                MAX_PACKETS  = 8,
-    localparam T_ID_M_WIDTH = $clog2(S_DATA_COUNT),
+    localparam T_ID___WIDTH = $clog2(S_DATA_COUNT),
                T_DEST_WIDTH = $clog2(M_DATA_COUNT)
 )(
     input  logic clk,
@@ -72,12 +72,38 @@ logic [S_DATA_COUNT-1:0] busy_each [M_DATA_COUNT-1:0];
 genvar x;
 generate
     for (x = 0; x < M_DATA_COUNT; x = x + 1) begin
-        assign busy_each[x] = req[x] ^ grant[x]; 
+        assign busy_each[x] = req[x] ^ grant[x];     
     end
 endgenerate
 
-assign s_ready_o[0] = ~(busy_each[0][0] | busy_each [1][0] | busy_each[2][0]);
-assign s_ready_o[1] = ~(busy_each[0][1] | busy_each [1][1] | busy_each[2][1]);
+logic [M_DATA_COUNT-1:0] busy_each_t [S_DATA_COUNT-1:0];
+
+genvar k, l;
+generate
+    for (k = 0; k < S_DATA_COUNT; k = k + 1) begin
+        for (l = 0; l < M_DATA_COUNT; l = l + 1) begin
+            assign busy_each_t[k][l] = busy_each[l][k];
+        end
+    end
+endgenerate
+
+logic [S_DATA_COUNT-1:0]  s_ready_ir;
+genvar m;
+generate
+    for (m = 0; m < S_DATA_COUNT; m = m + 1) begin
+        bit_add_or #(
+            .NUM_TERMS (M_DATA_COUNT)
+        ) u_bit_add_or(
+            .terms_i (busy_each_t[m] ),
+            .res_o   (s_ready_ir[m]   )
+        );
+    end
+endgenerate
+
+assign s_ready_o = ~s_ready_ir;
+
+// assign s_ready_o[0] = ~(busy_each[0][0] | busy_each [1][0]);
+// assign s_ready_o[1] = ~(busy_each[0][1] | busy_each [1][1]);
 
 
 endmodule

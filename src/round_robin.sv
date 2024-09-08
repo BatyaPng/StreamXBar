@@ -1,5 +1,5 @@
 module round_robin #(
-    parameter  NUM_REQUEST       = 4,
+    parameter  NUM_REQUEST       = 2,
     parameter  MAX_PACKETS       = 8,
     localparam WIDTH_NUM         = $clog2(NUM_REQUEST),
     localparam WIDTH_MAX_PACKETS = $clog2(MAX_PACKETS)
@@ -41,10 +41,18 @@ always @(posedge clk) begin
     end
 end
 
-assign grant_ptr   = grant_ptr_vec[1] ? 1 :
-                     grant_ptr_vec[0] ? 0 : 0;
-// grant_ptr_vec[3] ? 3 :
-//                      grant_ptr_vec[2] ? 2 :
+par_coder #(
+    .S_DATA_COUNT (NUM_REQUEST )
+) u_par_coder(
+    .m_vec_i (grant_ptr_vec ),
+    .m_id    (grant_ptr     )
+);
+
+
+// assign grant_ptr   = grant_ptr_vec[1] ? 1 :
+//                      grant_ptr_vec[0] ? 0 : 0;
+// // grant_ptr_vec[3] ? 3 :
+// //                      grant_ptr_vec[2] ? 2 :
                      
 always @(posedge clk) begin
     if (!rst_n) begin
@@ -58,6 +66,8 @@ always @(posedge clk) begin
     if (!rst_n) begin
         prio_ptr <= 0;
     end else if (prio_ptr == NUM_REQUEST) begin
+        prio_ptr <= 0;
+    end else if (!(request_i & 0)) begin
         prio_ptr <= 0;
     end else if (num_packet == 1) begin
         prio_ptr <= grant_ptr;

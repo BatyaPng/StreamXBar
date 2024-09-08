@@ -6,7 +6,7 @@ module bit_add_or #(
     // input
     input  logic [NUM_TERMS-1:0] terms_i,
     // output
-    output logic                 res 
+    output logic                 res_o 
 );
 
-assign res =
+assign res_o =
