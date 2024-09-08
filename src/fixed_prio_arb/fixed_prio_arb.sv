@@ -9,7 +9,7 @@ module fixed_prio_arb #(
 
 assign grant_o[0]  = request_i[0];
 assign grant_o[1]  = request_i[1] & ~request_i[0];
-assign grant_o[2]  = request_i[2] & ~request_i[1] & ~request_i[0];
-assign grant_o[3]  = request_i[3] & ~request_i[2] & ~request_i[1] & ~request_i[0];
+// assign grant_o[2]  = request_i[2] & ~request_i[1] & ~request_i[0];
+// assign grant_o[3]  = request_i[3] & ~request_i[2] & ~request_i[1] & ~request_i[0];
 
 endmodule

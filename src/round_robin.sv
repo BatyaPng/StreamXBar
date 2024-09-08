@@ -13,7 +13,14 @@ module round_robin #(
     output logic [NUM_REQUEST-1:0] grant_o
 );
 
+wire [NUM_REQUEST-1:0]      grant_fixed_vec;
+wire [WIDTH_NUM-1:0]        grant_ptr;
+
+reg [NUM_REQUEST-1:0]       grant_ptr_vec;
+reg [WIDTH_NUM-1:0]         prio_ptr;
 reg [WIDTH_MAX_PACKETS-1:0] num_packet;
+reg                         last_flag;
+
 always @(posedge clk) begin
     if (!rst_n) begin
         num_packet <= 0;
@@ -24,7 +31,6 @@ always @(posedge clk) begin
     end
 end
 
-reg [NUM_REQUEST-1:0] grant_ptr_vec;
 always @(posedge clk) begin
     if (!rst_n) begin
         grant_ptr_vec <= 0;
@@ -35,13 +41,19 @@ always @(posedge clk) begin
     end
 end
 
-wire [WIDTH_NUM-1:0] grant_ptr;
-assign grant_ptr   = grant_ptr_vec[3] ? 3 :
-                     grant_ptr_vec[2] ? 2 :
-                     grant_ptr_vec[1] ? 1 :
+assign grant_ptr   = grant_ptr_vec[1] ? 1 :
                      grant_ptr_vec[0] ? 0 : 0;
+// grant_ptr_vec[3] ? 3 :
+//                      grant_ptr_vec[2] ? 2 :
+                     
+always @(posedge clk) begin
+    if (!rst_n) begin
+        last_flag <= 0;
+    end else if (s_last_i[prio_ptr]) begin
+        last_flag <= 1;
+    end
+end
 
-reg [WIDTH_NUM-1:0] prio_ptr;
 always @(posedge clk) begin
     if (!rst_n) begin
         prio_ptr <= 0;
@@ -51,12 +63,12 @@ always @(posedge clk) begin
         prio_ptr <= grant_ptr;
     end else if (!s_last_i[prio_ptr]) begin
         prio_ptr <= prio_ptr;
-    end else if (s_last_i[prio_ptr]) begin
+    end else if (last_flag) begin
         prio_ptr <= prio_ptr + 1;
+        last_flag <= 0;
     end
 end
 
-wire [NUM_REQUEST-1:0] grant_fixed_vec;
 fixed_prio_arb  #(
     .NUM_REQUEST (NUM_REQUEST )
 ) u_fixed_prio_arb(

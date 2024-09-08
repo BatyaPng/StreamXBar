@@ -65,13 +65,21 @@ initial begin
     $display ("Test 3: Expected %b, got %b", expected_grant_o, grant_o);
 
 
-    // Тест 4: четвёртон устройсто завершило работу, запрос от второго
+    // Тест 4:
     #1;
     s_last_i = 4'b0100;
     request_i = 4'b1011;
     expected_grant_o = 4'b1000; // Приоритет второго устройства
     #1;
     // request_i = 4'b0010;
+    #5;
+    $display ("Test 4: Expected %b, got %b", expected_grant_o, grant_o);
+
+    // Тест 5:
+    #1;
+    s_last_i = 4'b1000;
+    request_i = 4'b0011;
+    expected_grant_o = 4'b0001; // Приоритет второго устройства
     #5;
     $display ("Test 4: Expected %b, got %b", expected_grant_o, grant_o);
     

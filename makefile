@@ -1,5 +1,5 @@
-conflict_finder:
-	iverilog ./test/tb_conflict_finder.sv ./src/conflict_finder.sv -g2009 -o conflict_finder
+all:
+	iverilog ./test/tb_stream_xbar.sv ./src/stream_xbar.sv ./src/request_gen.sv ./src/fixed_prio_arb/fixed_prio_arb.sv ./src/round_robin.sv ./src/com.sv -g2009 -o stream_xbar
 
 request_gen:
 	iverilog ./test/tb_request_gen.sv ./src/request_gen.sv -g2009 -o request_gen
@@ -14,4 +14,4 @@ com:
 	iverilog ./test/tb_com.sv ./src/com.sv -g2009 -o com
 	
 clear:
-	rm conflict_finder request_gen fixed_prio_arb round_robin com
+	rm stream_xbar request_gen fixed_prio_arb round_robin com

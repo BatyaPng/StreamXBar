@@ -4,3 +4,5 @@ fixed_prio_arb
 round_robin
 dump.vcd
 com
+stream_xbar.vcd
+stream_xbar
