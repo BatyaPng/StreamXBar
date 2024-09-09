@@ -30,28 +30,8 @@ generate
             .m_vec_i (req_i[i] ),
             .m_id    (num_s[i] )
         );
-
-        // seq_coder #(
-        //     .S_DATA_COUNT (S_DATA_COUNT )
-        // ) u_seq_coder(
-        //     .m_vec_i (req_i[i] ),
-        //     .m_id    (no_m[i]  )
-        // );
-        
-        
-        // assign num_s[i]     = req_i[i][1] ? 1 :
-        //                       req_i[i][0] ? 0 : 0;
-        // assign no_m[i]      = req_i[i][1] ? 0 :
-        //                       req_i[i][0] ? 0 : 1;
     end
 endgenerate
-
-// genvar j;
-// generate
-//     for (j = 0; j < M_DATA_COUNT; j = j + 1) begin
-//         assign no_m[j] = ~((num_s[j] == j) & s_valid_i[num_s[j]]);
-//     end
-// endgenerate
 
 genvar x;
 generate
