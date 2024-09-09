@@ -206,7 +206,7 @@ assign m_id = m_vec_i[1] ?  1 :
 
 Для начала работы с проектом необходимо клонировать репозиторий с GitHub:
 
-****```bash
+```bash
 git clone https://github.com/BatyaPng/StreamXBar
 cd StreamXBar
 ```
