@@ -4,7 +4,7 @@ module tb_com();
   parameter T_DATA_WIDTH = 8;
   parameter S_DATA_COUNT = 2;
   parameter M_DATA_COUNT = 3;
-  parameter T_ID___WIDTH = $clog2(S_DATA_COUNT);
+  parameter T_ID_M_WIDTH = $clog2(S_DATA_COUNT);
   parameter T_DEST_WIDTH = $clog2(M_DATA_COUNT);
 
   // Входы
@@ -17,7 +17,7 @@ module tb_com();
 
   // Выходы
   wire [T_DATA_WIDTH-1:0] m_data_o  [M_DATA_COUNT-1:0];
-  wire [T_ID___WIDTH-1:0] m_id_o    [M_DATA_COUNT-1:0];
+  wire [T_ID_M_WIDTH-1:0] m_id_o    [M_DATA_COUNT-1:0];
   wire [M_DATA_COUNT-1:0] m_last_o;
   wire [M_DATA_COUNT-1:0] m_valid_o;
 
@@ -42,7 +42,7 @@ module tb_com();
   task check_output;
     input int slave_index;
     input [T_DATA_WIDTH-1:0] expected_data;
-    input [T_ID___WIDTH-1:0] expected_id;
+    input [T_ID_M_WIDTH-1:0] expected_id;
     input expected_last;
     input expected_valid;
 

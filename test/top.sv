@@ -1,9 +1,9 @@
-module top;
+module tb_stream_xbar;
 
 // Parameters
-localparam T_DATA_WIDTH = 8;
+localparam T_DATA_WIDTH = 4;
 localparam S_DATA_COUNT = 2;
-localparam M_DATA_COUNT = 3;
+localparam M_DATA_COUNT = 2;
 localparam T_DEST_WIDTH = $clog2(M_DATA_COUNT);
 
 // Inputs
@@ -77,35 +77,130 @@ initial begin
     // Initialize Inputs
     clk = 0;
     rst_n = 0;
-    s_data_i[0] = 0;
-    s_data_i[1] = 0;
-    s_dest_i[0] = 0;
-    s_dest_i[1] = 0;
-    s_last_i = 0;
-    s_valid_i = 0;
-    m_ready_i = 0;
+
+    m_ready_i[0] = 1;
+    m_ready_i[1] = 1;
 
     // Apply Reset
-    #5  rst_n = 1;
+    #2;  rst_n = 1;
 
-    // Test 1: Master 0 sends data to Slave 0; Master 1 sends data to Slave 0
-    s_data_i[0] = 8'hAA;
-    s_dest_i[0] = 0;
+    //////////2//////////
+    // Master 0
     s_valid_i[0] = 1;
-    m_ready_i[0] = 1;
-    s_last_i[0] = 1;
+    s_dest_i [0] = 0;
+    s_data_i [0] = 4'hA;
+    s_last_i [0] = 0;
 
 
-    s_data_i[1] = 8'hBB;
-    s_dest_i[1] = 0;
+    // Master 1
     s_valid_i[1] = 1;
-    m_ready_i[1] = 1;
-    s_last_i[1] = 1;
+    s_dest_i [1] = 0;
+    s_data_i [1] = 4'hC;
+    s_last_i [1] = 0;
+    //////////2//////////
 
     #1;
-    s_valid_i[0] = 0;
+
+    //////////3//////////
+    // Master 0
+    s_valid_i[0] = 1;
+    s_dest_i [0] = 0;
+    s_data_i [0] = 4'hb;
+    s_last_i [0] = 1;
+
+
+    // Master 1
+    s_valid_i[1] = 1;
+    s_dest_i [1] = 0;
+    s_data_i [1] = 4'hC;
+    s_last_i [1] = 0;
+    //////////3//////////
+    
     #1;
+
+    //////////4//////////
+    // Master 0
+    s_valid_i[0] = 0;
+    s_dest_i [0] = 0;
+    s_data_i [0] = 4'hb;
+    s_last_i [0] = 1;
+
+
+    // Master 1
+    s_valid_i[1] = 1;
+    s_dest_i [1] = 0;
+    s_data_i [1] = 4'hC;
+    s_last_i [1] = 0;
+    //////////4//////////
+        
+    #1;
+
+    //////////5//////////
+    // Master 0
+    s_valid_i[0] = 0;
+    s_dest_i [0] = 0;
+    s_data_i [0] = 4'hb;
+    s_last_i [0] = 1;
+
+
+    // Master 1
+    s_valid_i[1] = 1;
+    s_dest_i [1] = 0;
+    s_data_i [1] = 4'hd;
+    s_last_i [1] = 1;
+    //////////5//////////
+            
+    #1;
+
+    //////////6//////////
+    // Master 0
+    s_valid_i[0] = 1;
+    s_dest_i [0] = 1;
+    s_data_i [0] = 4'he;
+    s_last_i [0] = 0;
+
+
+    // Master 1
+    s_valid_i[1] = 1;
+    s_dest_i [1] = 0;
+    s_data_i [1] = 4'h8;
+    s_last_i [1] = 0;
+    //////////6//////////
+                
+    #1;
+
+    //////////7//////////
+    // Master 0
+    s_valid_i[0] = 1;
+    s_dest_i [0] = 1;
+    s_data_i [0] = 4'hf;
+    s_last_i [0] = 1;
+
+
+    // Master 1
+    s_valid_i[1] = 1;
+    s_dest_i [1] = 0;
+    s_data_i [1] = 4'h9;
+    s_last_i [1] = 1;
+    //////////7//////////
+                    
+    #1;
+
+    //////////8//////////
+    // Master 0
+    s_valid_i[0] = 0;
+    s_dest_i [0] = 1;
+    s_data_i [0] = 4'hf;
+    s_last_i [0] = 1;
+
+
+    // Master 1
     s_valid_i[1] = 0;
+    s_dest_i [1] = 0;
+    s_data_i [1] = 4'h9;
+    s_last_i [1] = 1;
+    //////////8//////////
+
 
 end
 

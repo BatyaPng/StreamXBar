@@ -6,3 +6,4 @@ dump.vcd
 com
 stream_xbar.vcd
 stream_xbar
+conf/modelsim/

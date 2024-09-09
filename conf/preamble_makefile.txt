@@ -1,0 +1,31 @@
+S_DATA_COUNT = 2   # кол-во master-устройств
+M_DATA_COUNT = 2   # кол-во slave-устройств
+
+PATH_PREFIX_BIT_ADD_NOR    = ../../src/bit_add_nor/
+PATH_PREFIX_FIXED_PRIO_ARB = ../../src/fixed_prio_arb/
+PATH_PREFIX_PAR_CODER      = ../../src/par_coder/
+PATH_PREFIX_SEQ_CODER      = ../../src/seq_coder/
+PATH_PREFIX_SEQ_CODER_S    = ../../src/seq_coder_s/
+
+all:
+	python3 ../../src/bit_add_nor/gen_code.py    $(M_DATA_COUNT) $(PATH_PREFIX_BIT_ADD_NOR)
+	python3 ../../src/fixed_prio_arb/gen_code.py $(S_DATA_COUNT) $(PATH_PREFIX_FIXED_PRIO_ARB)
+	python3 ../../src/par_coder/gen_code.py	     $(S_DATA_COUNT) $(PATH_PREFIX_PAR_CODER)
+	python3 ../../src/seq_coder/gen_code.py      $(S_DATA_COUNT) $(PATH_PREFIX_SEQ_CODER)
+	python3 ../../src/seq_coder_s/gen_code.py    $(S_DATA_COUNT) $(PATH_PREFIX_SEQ_CODER_S)
+
+	cp $(PATH_PREFIX_BIT_ADD_NOR)bit_add_nor.sv bit_add_nor.sv
+	cp $(PATH_PREFIX_FIXED_PRIO_ARB)fixed_prio_arb.sv fixed_prio_arb.sv
+	cp $(PATH_PREFIX_PAR_CODER)par_coder.sv par_coder.sv
+	cp $(PATH_PREFIX_SEQ_CODER)seq_coder.sv seq_coder.sv
+	cp $(PATH_PREFIX_SEQ_CODER_S)seq_coder_s.sv seq_coder_s.sv
+	cp ../../src/com.sv com.sv
+	cp ../../src/request_gen.sv request_gen.sv
+	cp ../../src/round_robin.sv round_robin.sv
+
+	verilator ./top.sv ./stream_xbar.sv ../../src/com.sv ../../src/bit_add_nor/bit_add_nor.sv ../../src/fixed_prio_arb/fixed_prio_arb.sv ../../src/par_coder/par_coder.sv ../../src/seq_coder/seq_coder.sv ../../src/seq_coder_s/seq_coder_s.sv ../../src/request_gen.sv ../../src/round_robin.sv -o stream_xbar --lint-only
+
+
+
+clear:
+	rm bit_add_nor.sv fixed_prio_arb.sv par_coder.sv seq_coder.sv seq_coder_s.sv com.sv request_gen.sv round_robin

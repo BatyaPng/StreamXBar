@@ -2,7 +2,7 @@ module com #(
     parameter  T_DATA_WIDTH = 8,
                S_DATA_COUNT = 2,                                  // кол-во master устройств
                M_DATA_COUNT = 3,                                  // кол-во slave  устройств
-    localparam T_ID___WIDTH = $clog2(S_DATA_COUNT),
+    localparam T_ID_M_WIDTH = $clog2(S_DATA_COUNT),
                T_DEST_WIDTH = $clog2(M_DATA_COUNT)
 )(
     // multiple input streams
@@ -12,19 +12,19 @@ module com #(
     input  logic [S_DATA_COUNT-1:0] s_valid_i,
     // multiple output streams
     output logic [T_DATA_WIDTH-1:0] m_data_o  [M_DATA_COUNT-1:0],
-    output logic [T_ID___WIDTH-1:0] m_id_o    [M_DATA_COUNT-1:0],
+    output logic [T_ID_M_WIDTH-1:0] m_id_o    [M_DATA_COUNT-1:0],
     output logic [M_DATA_COUNT-1:0] m_last_o,
     output logic [M_DATA_COUNT-1:0] m_valid_o,
     input  logic [M_DATA_COUNT-1:0] m_ready_i
 );
 
-logic [T_ID___WIDTH:0] num_s [M_DATA_COUNT-1:0];
+logic [T_ID_M_WIDTH:0] num_s [M_DATA_COUNT-1:0];
 logic                  no_m  [M_DATA_COUNT-1:0];
 
 genvar i;
 generate
     for (i = 0; i < M_DATA_COUNT; i = i + 1) begin
-        par_coder_s #(
+        seq_coder_s #(
             .S_DATA_COUNT (S_DATA_COUNT )
         ) u_par_coder_s (
             .m_vec_i (req_i[i] ),
