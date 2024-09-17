@@ -24,6 +24,8 @@ reg                         last_flag;
 always @(posedge clk) begin
     if (!rst_n) begin
         num_packet <= 0;
+    end else if (!(request_i & 0)) begin
+        num_packet <= 0;
     end else if (s_last_i[grant_ptr]) begin
         num_packet <= 0;
     end else begin
@@ -48,18 +50,15 @@ par_coder #(
     .m_id    (grant_ptr     )
 );
 
-
-// assign grant_ptr   = grant_ptr_vec[1] ? 1 :
-//                      grant_ptr_vec[0] ? 0 : 0;
-// // grant_ptr_vec[3] ? 3 :
-// //                      grant_ptr_vec[2] ? 2 :
                      
 always @(posedge clk) begin
     if (!rst_n) begin
         last_flag <= 0;
+    end else  if (last_flag) begin
+        last_flag <= 0;
     end else if (s_last_i[prio_ptr]) begin
         last_flag <= 1;
-    end
+    end 
 end
 
 always @(posedge clk) begin
@@ -75,7 +74,6 @@ always @(posedge clk) begin
         prio_ptr <= prio_ptr;
     end else if (last_flag) begin
         prio_ptr <= prio_ptr + 1;
-        last_flag <= 0;
     end
 end
 
